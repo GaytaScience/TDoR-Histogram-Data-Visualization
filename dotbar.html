@@ -1,0 +1,285 @@
+<!-- STARTING EXAMPLE: https://bl.ocks.org/gcalmettes/95e3553da26ec90fd0a2890a678f3f69 -->
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.enter {
+  fill: #EDCA3A;
+}
+
+.update {
+  fill: #1FBAD6;
+}
+
+.exit {
+  fill: #F25754;
+}
+
+.selected {
+  fill: #E6B0F1;
+}
+
+div.tooltip {
+  color: black;
+  position: absolute;
+  text-align: left;
+  width: auto;
+  height: auto;
+  padding: 5px;
+  font-family: Futura;
+  font: 12px sans-serif ;
+  background: #FCB8C3FF;
+  border: 0px;
+  border-radius: 8px;
+  pointer-events: none;
+}
+
+</style>
+
+
+<body>
+<script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/D5E5001F-AA7E-4E47-8C5F-BD52C68CD6AE/main.js" charset="UTF-8"></script><script src="https://d3js.org/d3.v4.min.js"></script>
+<script>
+
+//SVG setup
+const margin = {top: 10, right: 30, bottom: 30, left: 30},
+      width = 600 - margin.left - margin.right,
+      height = 480 - margin.top - margin.bottom;
+
+// Custome time format
+var formatMillisecond = d3.timeFormat(".%L"),
+    formatSecond = d3.timeFormat(":%S"),
+    formatMinute = d3.timeFormat("%I:%M"),
+    formatHour = d3.timeFormat("%I %p"),
+    formatDay = d3.timeFormat("%a %d"),
+    formatWeek = d3.timeFormat("%b %d"),
+    formatMonth = d3.timeFormat("%b"),
+    formatYear = d3.timeFormat("%Y");
+function multiFormat(date) {
+  return (d3.timeSecond(date) < date ? formatMillisecond
+      : d3.timeMinute(date) < date ? formatSecond
+      : d3.timeHour(date) < date ? formatMinute
+      : d3.timeDay(date) < date ? formatHour
+      : d3.timeMonth(date) < date ? (d3.timeWeek(date) < date ? formatDay : formatWeek)
+      : d3.timeYear(date) < date ? formatMonth
+      : formatYear)(date);
+}
+
+//var parseTime = d3.timeFormat("%m/%d/%y");
+var parseTime = d3.timeParse("%m/%d/%y");
+
+//x scales
+// const x = d3.scaleLinear()
+//     .rangeRound([0, width])
+//     .domain([0, 12]);
+
+//var x = d3.scaleTime().range([0, width]);
+
+// var xAxis = d3.svg.axis().scale(x)
+//             .orient("bottom").tickFormat(formatDate);
+
+// var x2Axis = d3.axisBottom(x2)
+//              .tickArguments([d3.timeDay.every(1)]);
+
+//set up svg
+const svg = d3.select("body")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+            `translate(${margin.left}, ${margin.top})`);
+
+//tooltip
+const tooltip = d3.select("body")
+  .append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0);
+
+const t = d3.transition()
+      .duration(1000);
+
+const dataFile = "data/roster.csv"
+
+//number of bins for histogram
+//const nbins = 12;
+
+//Note: data fetching is done each time the function is ran
+//as d3.csv is replaced by tabletop.js request to get data each time
+//from google spreadsheet
+
+function update(){
+  // Get the data
+  d3.csv(dataFile, function(error, allData) {
+    if (error) throw error;
+    allData.forEach(function(d) {
+        d.Name = d.Name
+        //d.Value = +d.Value
+        d.date = parseTime(d.date);
+    });
+    //simulate new data by randomizing/slicing
+    let data = d3.shuffle(allData)
+      //.slice(0, 35)
+
+    console.log(data)
+
+    // Determine the first and last dates in the data set
+    var dayExtent = d3.extent(data, function (d) { return d.date; });
+
+    // Create one bin per day, use an offset to include the first and last days
+    var dayBins = d3.timeWeeks(d3.timeDay.offset(dayExtent[0],-1),
+                              d3.timeDay.offset(dayExtent[1], 1));
+
+    var x2 = d3.scaleTime()
+             .domain(dayExtent)
+             .rangeRound([0, width]);
+
+    var x2Axis = d3.axisBottom(x2)
+             //.tickArguments([d3.timeWeek.every(1)])
+             .tickFormat(multiFormat);;
+
+    // add x axis
+    svg.append("g")
+      .attr("class", "axis axis--x")
+      .attr("transform", "translate(0," + height + ")")
+      //.call(d3.axisBottom(x))
+      .call(x2Axis);
+
+    //histogram binning
+    const histogram = d3.histogram()
+              .value(function(d) { return d.date; })
+              .domain(x2.domain())
+              .thresholds(x2.ticks(dayBins.length));
+      // .domain(x.domain())
+      // .thresholds(x.ticks(nbins))
+      // .value(function(d) { return d.Value;} )
+
+    //binning data and filtering out empty bins
+    const bins = histogram(data)//.filter(d => d.length>0)
+
+    console.log(bins)
+
+    //g container for each bin
+    let binContainer = svg.selectAll(".gBin")
+      .data(bins);
+
+    binContainer.exit().remove()
+
+    let binContainerEnter = binContainer.enter()
+      .append("g")
+        .attr("class", "gBin")
+        .attr("transform", d => `translate(${x2(d.x0)}, ${height})`)
+
+    //need to populate the bin containers with data the first time
+    binContainerEnter.selectAll("circle")
+        .data(d => d.map((p, i) => {
+          return {idx: i,
+                  name: p.Name,
+                  value: p.date,
+                  //radius: 15
+                  radius: (x2(d.x1)-x2(d.x0))/2
+                }
+        }))
+      .enter()
+      .append("circle")
+        .attr("class", "enter")
+        .attr("cx", 0) //g element already at correct x pos
+        .attr("cy", function(d) {
+            return - d.idx * 2 * d.radius - d.radius; })
+        .attr("r", 0)
+        .on("mouseover", tooltipOn)
+        .on("mouseout", tooltipOff)
+        .transition()
+          .duration(500)
+          .attr("r", function(d) {
+          return (d.length==0) ? 0 : d.radius; })
+
+    binContainerEnter.merge(binContainer)
+        .attr("transform", d => `translate(${x2(d.x0)}, ${height})`)
+
+    //enter/update/exit for circles, inside each container
+    let dots = binContainer.selectAll("circle")
+        .data(d => d.map((p, i) => {
+          return {idx: i,
+                  name: p.Name,
+                  value: p.date,
+                  radius: (x2(d.x1)-x2(d.x0))/2
+                }
+        }))
+
+    //EXIT old elements not present in data
+    dots.exit()
+        .attr("class", "exit")
+      .transition(t)
+        .attr("r", 0)
+        .remove();
+
+    //UPDATE old elements present in new data.
+    dots.attr("class", "update");
+
+    //ENTER new elements present in new data.
+    dots.enter()
+      .append("circle")
+        .attr("class", "enter")
+        .attr("cx", 0) //g element already at correct x pos
+        .attr("cy", function(d) {
+          return - d.idx * 2 * d.radius - d.radius; })
+        .attr("r", 0)
+      .merge(dots)
+        .on("mouseover", tooltipOn)
+        .on("mouseout", tooltipOff)
+        .transition()
+          .duration(500)
+          .attr("r", function(d) {
+          return (d.length==0) ? 0 : d.radius; })
+  });//d3.csv
+};//update
+
+function tooltipOn(d) {
+  //x position of parent g element
+  let gParent = d3.select(this.parentElement)
+  let translateValue = gParent.attr("transform")
+
+  let gX = translateValue.split(",")[0].split("(")[1]
+  let gY = height + (+d3.select(this).attr("cy")-50)
+
+  d3.select(this)
+    .classed("selected", true)
+  tooltip.transition()
+       .duration(200)
+       .style("opacity", .9);
+  tooltip.html(d.name + "<br/> (" + d.value + ")")
+    .style("left", gX + "px")
+    .style("top", gY + "px");
+}//tooltipOn
+
+function tooltipOff(d) {
+  d3.select(this)
+      .classed("selected", false);
+    tooltip.transition()
+         .duration(500)
+         .style("opacity", 0);
+}//tooltipOff
+
+
+
+// // add x axis
+// svg.append("g")
+//   .attr("class", "axis axis--x")
+//   .attr("transform", "translate(0," + height + ")")
+//   //.call(d3.axisBottom(x))
+//   .call(x2Axis);
+
+//draw everything
+update();
+
+//update with new data every 3sec
+// d3.interval(function() {
+//   update();
+// }, 3000);
+
+</script>
+
+
+</body>
+</html>
