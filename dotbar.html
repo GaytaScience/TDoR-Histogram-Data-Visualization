@@ -2,10 +2,13 @@
 <!-- Excel formula for some of the dates: =TEXT(MID(F39,4,2),"##")&"/"&LEFT(F39,2)&"/"&RIGHT(F39,4) -->
 <!DOCTYPE html>
 <meta charset="utf-8">
+<script src="https://code.jquery.com/jquery.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 <style>
 
 .enter {
-  fill: #EDCA3A;
+  /*fill: #EDCA3A;*/
+  fill:#7997c6;
 }
 
 /*.update {
@@ -20,6 +23,10 @@
   fill: #E6B0F1;
 }
 
+div {
+    text-align:center;
+}
+
 div.tooltip {
   color: black;
   position: absolute;
@@ -28,39 +35,114 @@ div.tooltip {
   height: auto;
   padding: 5px;
   font-family: Futura;
-  font: 12px sans-serif ;
-  background: #FCB8C3FF;
+  font: 1em sans-serif ;
+  background: #E6B0F1;
   border: 0px;
   border-radius: 8px;
   pointer-events: none;
 }
 
+.button {
+    background-color: #2c75be; 
+    border: none;
+    color: white;
+    padding: 10px 24px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    -webkit-transition-duration: 0.1s; /* Safari */
+    transition-duration: 0.1s;
+    margin: .5em .5em;
+}
+
+.button:hover {
+    background-color: #7997c6;
+    color: white;
+}
+
+.button:focus {
+    background-color: #7997c6;
+    color: white;
+}
+
+body {
+    background-color: black;
+}
+
+.axis--x line{
+  stroke: white;
+}
+
+.axis--x path{
+  stroke: white;
+}
+
+.axis--x text{
+  fill: white;
+} 
+
+#title {
+  color: white;
+  padding: 5px;
+  font-family: Futura;
+  font: 2em sans-serif ;
+}
+
+#intro {
+  color: white;
+  padding: 5px;
+  font-family: Futura;
+  font: 1em sans-serif ;
+  text-align:center;
+} 
+
+#cite {
+  color: white;
+  padding: 5px;
+  font-family: Futura;
+  font: .8em sans-serif ;
+  text-align:left;
+}  
+
 </style>
 
 
 <body>
-<div class="control-group">
-    <button onclick="update('Africa')">
+<div class = "row">
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "title" align=center>TDoR 2017</div>
+</div>
+<div class = "row">
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "intro" align=center>325 reported murders of trans and gender-diverse people between October 1, 2016 and September 30, 2017</div>
+</div>
+<div class="row">
+    <button class = "button" onclick="update('Africa')">
         Africa
     </button>
-    <button onclick="update('Asia')">
+    <button class = "button" onclick="update('Asia')">
         Asia
     </button>
-    <button onclick="update('Europe')">
+    <button class = "button" onclick="update('Europe')">
         Europe
     </button>
-    <button onclick="update('North America')">
+    <button class = "button" onclick="update('North America')">
         North America
     </button>
-    <button onclick="update('Oceania')">
+    <button class = "button" onclick="update('Oceania')">
         Oceania
     </button>
-    <button onclick="update('South America')">
+    <button class = "button" onclick="update('South America')">
         South America
     </button>
-    <button onclick="update('All')">
+    <button class = "button" onclick="update('All')">
         All
     </button>
+</div>
+<div class = "row">
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "chart" align=center></div>
+</div>
+<div class = "row">
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "cite" align=left style="white-space: pre-wrap;">N.N. = Not Named &#10;Data from TvT research project (2017) “Trans Murder Monitoring (TMM) TDoR 2017 Update”, Transrespect versus Transphobia Worldwide &#10;TvT project website: http://transrespect.org/en/trans-murder-monitoring/tmm-resources</div>
 </div>
 
 <script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/D5E5001F-AA7E-4E47-8C5F-BD52C68CD6AE/main.js" charset="UTF-8"></script><script src="https://d3js.org/d3.v4.min.js"></script>
@@ -69,7 +151,7 @@ div.tooltip {
 //SVG setup
 const margin = {top: 10, right: 30, bottom: 30, left: 30},
       width = 600 - margin.left - margin.right,
-      height = 300 - margin.top - margin.bottom;
+      height = 200 - margin.top - margin.bottom;
 
 // Custome time format
 var formatMillisecond = d3.timeFormat(".%L"),
@@ -95,10 +177,13 @@ var parseTime = d3.timeParse("%m/%d/%y");
 var formatTime = d3.timeFormat("%m/%d/%y");
 
 //set up svg
-const svg = d3.select("body")
-  .append("svg")
-  .attr("width", width + margin.left + margin.right)
-  .attr("height", height + margin.top + margin.bottom)
+// const svg = d3.select("body")
+//   .append("svg")
+var svg = d3.select("#chart").append("svg")
+  .attr("preserveAspectRatio", "xMinYMin meet")
+  .attr("viewBox", "0 0 600 200")
+  //.attr("width", width + margin.left + margin.right)
+  //.attr("height", height + margin.top + margin.bottom)
   .append("g")
   .attr("transform",`translate(${margin.left}, ${margin.top})`);
 
@@ -252,14 +337,15 @@ function tooltipOn(d) {
   let translateValue = gParent.attr("transform")
 
   let gX = translateValue.split(",")[0].split("(")[1]
-  let gY = height + (+d3.select(this).attr("cy")-50)
+  let gY = height + (+d3.select(this).attr("cy")+100)
+  //let gY = 150
 
   d3.select(this)
     .classed("selected", true)
   tooltip.transition()
     .duration(200)
     .style("opacity", .9);
-  tooltip.html(d.name + "<br/> " + d.age + "<br/> " + d.date + "<br/> " + d.location + "<br/> " + d.remarks)
+  tooltip.html("<strong>" + d.name + "</strong>" + "<br/> " + "Age " + d.age + "<br/> " + d.date + "<br/> " + d.location + "<br/> " + d.remarks)
     .style("left", gX + "px")
     .style("top", gY + "px");
 }//tooltipOn
@@ -277,7 +363,7 @@ var x2Axis = d3.axisBottom(x2)
                .tickFormat(multiFormat);
 
 svg.append("g")
-   .attr("class", "axis axis--x")
+   .attr("class", "axis--x")
    .attr("transform", "translate(0," + height + ")")
    .call(x2Axis);
 
