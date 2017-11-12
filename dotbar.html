@@ -1,4 +1,5 @@
 <!-- STARTING EXAMPLE: https://bl.ocks.org/gcalmettes/95e3553da26ec90fd0a2890a678f3f69 -->
+<!-- Excel formula for some of the dates: =TEXT(MID(F39,4,2),"##")&"/"&LEFT(F39,2)&"/"&RIGHT(F39,4) -->
 <!DOCTYPE html>
 <meta charset="utf-8">
 <style>
@@ -7,13 +8,13 @@
   fill: #EDCA3A;
 }
 
-.update {
+/*.update {
   fill: #1FBAD6;
 }
 
 .exit {
   fill: #F25754;
-}
+}*/
 
 .selected {
   fill: #E6B0F1;
@@ -38,13 +39,37 @@ div.tooltip {
 
 
 <body>
+<div class="control-group">
+    <button onclick="update('Africa')">
+        Africa
+    </button>
+    <button onclick="update('Asia')">
+        Asia
+    </button>
+    <button onclick="update('Europe')">
+        Europe
+    </button>
+    <button onclick="update('North America')">
+        North America
+    </button>
+    <button onclick="update('Oceania')">
+        Oceania
+    </button>
+    <button onclick="update('South America')">
+        South America
+    </button>
+    <button onclick="update('All')">
+        All
+    </button>
+</div>
+
 <script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/D5E5001F-AA7E-4E47-8C5F-BD52C68CD6AE/main.js" charset="UTF-8"></script><script src="https://d3js.org/d3.v4.min.js"></script>
 <script>
 
 //SVG setup
 const margin = {top: 10, right: 30, bottom: 30, left: 30},
       width = 600 - margin.left - margin.right,
-      height = 480 - margin.top - margin.bottom;
+      height = 300 - margin.top - margin.bottom;
 
 // Custome time format
 var formatMillisecond = d3.timeFormat(".%L"),
@@ -65,97 +90,74 @@ function multiFormat(date) {
       : formatYear)(date);
 }
 
-//var parseTime = d3.timeFormat("%m/%d/%y");
+// Parse function for date
 var parseTime = d3.timeParse("%m/%d/%y");
-
-//x scales
-// const x = d3.scaleLinear()
-//     .rangeRound([0, width])
-//     .domain([0, 12]);
-
-//var x = d3.scaleTime().range([0, width]);
-
-// var xAxis = d3.svg.axis().scale(x)
-//             .orient("bottom").tickFormat(formatDate);
-
-// var x2Axis = d3.axisBottom(x2)
-//              .tickArguments([d3.timeDay.every(1)]);
+var formatTime = d3.timeFormat("%m/%d/%y");
 
 //set up svg
 const svg = d3.select("body")
   .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
+  .attr("width", width + margin.left + margin.right)
+  .attr("height", height + margin.top + margin.bottom)
   .append("g")
-    .attr("transform",
-            `translate(${margin.left}, ${margin.top})`);
+  .attr("transform",`translate(${margin.left}, ${margin.top})`);
 
 //tooltip
 const tooltip = d3.select("body")
   .append("div")
-    .attr("class", "tooltip")
-    .style("opacity", 0);
+  .attr("class", "tooltip")
+  .style("opacity", 0);
 
-const t = d3.transition()
-      .duration(1000);
+const t = d3.transition().duration(1000);
 
-const dataFile = "data/roster.csv"
+const dataFile = "data/parsed.csv"
 
-//number of bins for histogram
-//const nbins = 12;
+// Define x axis (doesnt change)
+var x2 = d3.scaleTime()
+           .domain([new Date(2015,8,27), new Date(2016,9,1)])
+           .rangeRound([0, width]);
 
 //Note: data fetching is done each time the function is ran
 //as d3.csv is replaced by tabletop.js request to get data each time
 //from google spreadsheet
 
-function update(){
+function update(continent){
   // Get the data
   d3.csv(dataFile, function(error, allData) {
     if (error) throw error;
     allData.forEach(function(d) {
-        d.Name = d.Name
-        //d.Value = +d.Value
-        d.date = parseTime(d.date);
+      //d.cause = d.cause
+      //d.continent = d.continent
+      d.date = parseTime(d.date);
     });
-    //simulate new data by randomizing/slicing
-    let data = d3.shuffle(allData)
-      //.slice(0, 35)
 
+
+    // Filtered Data
+    if (continent == 'All') {
+      var data = allData;
+    }
+    else {
+      var data = allData.filter(function(d) { return d.continent == continent});
+    }
+  
     console.log(data)
 
     // Determine the first and last dates in the data set
-    var dayExtent = d3.extent(data, function (d) { return d.date; });
+    var dayExtent = d3.extent(allData, function (d) { return d.date; });
 
-    // Create one bin per day, use an offset to include the first and last days
-    var dayBins = d3.timeWeeks(d3.timeDay.offset(dayExtent[0],-1),
-                              d3.timeDay.offset(dayExtent[1], 1));
+    console.log(dayExtent);
 
-    var x2 = d3.scaleTime()
-             .domain(dayExtent)
-             .rangeRound([0, width]);
-
-    var x2Axis = d3.axisBottom(x2)
-             //.tickArguments([d3.timeWeek.every(1)])
-             .tickFormat(multiFormat);;
-
-    // add x axis
-    svg.append("g")
-      .attr("class", "axis axis--x")
-      .attr("transform", "translate(0," + height + ")")
-      //.call(d3.axisBottom(x))
-      .call(x2Axis);
+    // Create one bin per week, use offset for full weeks
+    var weekBins = d3.timeWeeks(dayExtent[0],dayExtent[1]);
 
     //histogram binning
     const histogram = d3.histogram()
               .value(function(d) { return d.date; })
               .domain(x2.domain())
-              .thresholds(x2.ticks(dayBins.length));
-      // .domain(x.domain())
-      // .thresholds(x.ticks(nbins))
-      // .value(function(d) { return d.Value;} )
+              .thresholds(x2.ticks(weekBins.length));
 
-    //binning data and filtering out empty bins
-    const bins = histogram(data)//.filter(d => d.length>0)
+    //binning data
+    const bins = histogram(data)
 
     console.log(bins)
 
@@ -166,7 +168,7 @@ function update(){
     binContainer.exit().remove()
 
     let binContainerEnter = binContainer.enter()
-      .append("g")
+        .append("g")
         .attr("class", "gBin")
         .attr("transform", d => `translate(${x2(d.x0)}, ${height})`)
 
@@ -174,10 +176,14 @@ function update(){
     binContainerEnter.selectAll("circle")
         .data(d => d.map((p, i) => {
           return {idx: i,
-                  name: p.Name,
-                  value: p.date,
-                  //radius: 15
-                  radius: (x2(d.x1)-x2(d.x0))/2
+                  name: p.name,
+                  date: formatTime(p.date),
+                  age: p.age,
+                  cause: p.cause,
+                  location: p.location,
+                  remarks: p.remarks,
+                  radius: 5
+                  //radius: (x2(d.x1)-x2(d.x0))/2
                 }
         }))
       .enter()
@@ -190,9 +196,9 @@ function update(){
         .on("mouseover", tooltipOn)
         .on("mouseout", tooltipOff)
         .transition()
-          .duration(500)
-          .attr("r", function(d) {
-          return (d.length==0) ? 0 : d.radius; })
+        .duration(500)
+        .attr("r", function(d) {
+            return (d.length==0) ? 0 : d.radius; })
 
     binContainerEnter.merge(binContainer)
         .attr("transform", d => `translate(${x2(d.x0)}, ${height})`)
@@ -201,36 +207,41 @@ function update(){
     let dots = binContainer.selectAll("circle")
         .data(d => d.map((p, i) => {
           return {idx: i,
-                  name: p.Name,
-                  value: p.date,
-                  radius: (x2(d.x1)-x2(d.x0))/2
+                  name: p.name,
+                  date: formatTime(p.date),
+                  age: p.age,
+                  cause: p.cause,
+                  location: p.location,
+                  remarks: p.remarks,
+                  //radius: (x2(d.x1)-x2(d.x0))/2
+                  radius: 5
                 }
         }))
 
     //EXIT old elements not present in data
     dots.exit()
-        .attr("class", "exit")
+      //.attr("class", "exit")
       .transition(t)
-        .attr("r", 0)
-        .remove();
+      .attr("r", 0)
+      .remove();
 
     //UPDATE old elements present in new data.
-    dots.attr("class", "update");
+    //dots.attr("class", "update");
 
     //ENTER new elements present in new data.
     dots.enter()
       .append("circle")
-        .attr("class", "enter")
-        .attr("cx", 0) //g element already at correct x pos
-        .attr("cy", function(d) {
+      .attr("class", "enter")
+      .attr("cx", 0) //g element already at correct x pos
+      .attr("cy", function(d) {
           return - d.idx * 2 * d.radius - d.radius; })
-        .attr("r", 0)
+      .attr("r", 0)
       .merge(dots)
-        .on("mouseover", tooltipOn)
-        .on("mouseout", tooltipOff)
-        .transition()
-          .duration(500)
-          .attr("r", function(d) {
+      .on("mouseover", tooltipOn)
+      .on("mouseout", tooltipOff)
+      .transition()
+      .duration(500)
+      .attr("r", function(d) {
           return (d.length==0) ? 0 : d.radius; })
   });//d3.csv
 };//update
@@ -246,9 +257,9 @@ function tooltipOn(d) {
   d3.select(this)
     .classed("selected", true)
   tooltip.transition()
-       .duration(200)
-       .style("opacity", .9);
-  tooltip.html(d.name + "<br/> (" + d.value + ")")
+    .duration(200)
+    .style("opacity", .9);
+  tooltip.html(d.name + "<br/> " + d.age + "<br/> " + d.date + "<br/> " + d.location + "<br/> " + d.remarks)
     .style("left", gX + "px")
     .style("top", gY + "px");
 }//tooltipOn
@@ -257,29 +268,23 @@ function tooltipOff(d) {
   d3.select(this)
       .classed("selected", false);
     tooltip.transition()
-         .duration(500)
-         .style("opacity", 0);
+      .duration(500)
+      .style("opacity", 0);
 }//tooltipOff
 
+// Add x axis
+var x2Axis = d3.axisBottom(x2)
+               .tickFormat(multiFormat);
 
-
-// // add x axis
-// svg.append("g")
-//   .attr("class", "axis axis--x")
-//   .attr("transform", "translate(0," + height + ")")
-//   //.call(d3.axisBottom(x))
-//   .call(x2Axis);
+svg.append("g")
+   .attr("class", "axis axis--x")
+   .attr("transform", "translate(0," + height + ")")
+   .call(x2Axis);
 
 //draw everything
-update();
-
-//update with new data every 3sec
-// d3.interval(function() {
-//   update();
-// }, 3000);
+update('All');
 
 </script>
-
 
 </body>
 </html>
