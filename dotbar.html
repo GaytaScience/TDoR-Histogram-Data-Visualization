@@ -102,8 +102,16 @@ body {
   padding: 5px;
   font-family: Futura;
   font: .8em sans-serif ;
-  text-align:left;
-}  
+  padding-right: 10%;
+} 
+
+.svg-container {
+    overflow: hidden;
+}
+.svg-content {
+    max-width: 1000px;
+    min-width: 300px;
+} 
 
 </style>
 
@@ -139,10 +147,10 @@ body {
     </button>
 </div>
 <div class = "row">
-  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "chart" align=center></div>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="container" class="svg-container" align=center></div>
 </div>
-<div class = "row">
-  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "cite" align=left style="white-space: pre-wrap;">N.N. = Not Named &#10;Data from TvT research project (2017) “Trans Murder Monitoring (TMM) TDoR 2017 Update”, Transrespect versus Transphobia Worldwide &#10;TvT project website: http://transrespect.org/en/trans-murder-monitoring/tmm-resources</div>
+<div class = "row" style="text-align: center;">
+    <a href="http://transrespect.org/en/trans-murder-monitoring/tmm-resources"><div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "cite" style="white-space: pre-wrap; display: inline-block; text-align: left;">N.N. = Not Named &#10;Data from TvT research project (2017) “Trans Murder Monitoring (TMM) TDoR 2017 Update”, Transrespect versus Transphobia Worldwide &#10;TvT project website: http://transrespect.org/en/trans-murder-monitoring/tmm-resources</div></a>
 </div>
 
 <script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/D5E5001F-AA7E-4E47-8C5F-BD52C68CD6AE/main.js" charset="UTF-8"></script><script src="https://d3js.org/d3.v4.min.js"></script>
@@ -179,11 +187,12 @@ var formatTime = d3.timeFormat("%m/%d/%y");
 //set up svg
 // const svg = d3.select("body")
 //   .append("svg")
-var svg = d3.select("#chart").append("svg")
+var svg = d3.select("div#container").append("svg")
   .attr("preserveAspectRatio", "xMinYMin meet")
   .attr("viewBox", "0 0 600 200")
   //.attr("width", width + margin.left + margin.right)
   //.attr("height", height + margin.top + margin.bottom)
+  .classed("svg-content", true)
   .append("g")
   .attr("transform",`translate(${margin.left}, ${margin.top})`);
 
@@ -345,7 +354,7 @@ function tooltipOn(d) {
   tooltip.transition()
     .duration(200)
     .style("opacity", .9);
-  tooltip.html("<strong>" + d.name + "</strong>" + "<br/> " + "Age " + d.age + "<br/> " + d.date + "<br/> " + d.location + "<br/> " + d.remarks)
+  tooltip.html("<strong>" + d.name + "</strong>" + "<br/> " + "Age " + d.age + "<br/> " + d.location + "<br/> " + d.remarks)
     .style("left", gX + "px")
     .style("top", gY + "px");
 }//tooltipOn
