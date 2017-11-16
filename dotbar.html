@@ -129,9 +129,6 @@ body {
     <button class = "button" onclick="update('North America')">
         North America
     </button>
-    <button class = "button" onclick="update('Oceania')">
-        Oceania
-    </button>
     <button class = "button" onclick="update('South America')">
         South America
     </button>
@@ -201,7 +198,7 @@ const dataFile = "data/parsed.csv"
 
 // Define x axis (doesnt change)
 var x2 = d3.scaleTime()
-           .domain([new Date(2015,8,27), new Date(2016,9,1)])
+           .domain([new Date(2016,9,1), new Date(2017,8,29)])
            .rangeRound([0, width]);
 
 //Note: data fetching is done each time the function is ran

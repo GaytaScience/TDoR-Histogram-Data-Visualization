@@ -1,10 +1,10 @@
 #----------------------------------------------------------------------------------------
 # Parse data from Trans day of Rememberance Update Report for Visualization
 #
-# Kelsey Campbell - 9/17/2017 (2016 Data Initially)
+# Kelsey Campbell - 11/11/2017
 #
 # Report Information:
-# TvT research project (2016) “Trans Murder Monitoring (TMM) TDoR 2016 Update”, Transrespect versus Transphobia Worldwide  
+# TvT research project (2017) “Trans Murder Monitoring (TMM) TDoR 2017 Update”, Transrespect versus Transphobia Worldwide  
 # TvT project website: http://transrespect.org/en/trans-murder-monitoring/tmm-resources/ 
 # ---------------------------------------------------------------------------------------
 
@@ -21,7 +21,7 @@ df = pd.DataFrame()
 
 # Define list of strings designating line without data, to pass (not record)
 passStrings = ["Name:", "Age", "Date of death", "Location of death", "Cause of death", "Remarks", "Source", "If you wish to reference", "TVT research project", \
-               "TvT research project", "TvT project website", "TMM UPDATE", "reported murders of", "between 1 October"]
+               "TvT research project", "TvT project website", "TMM UPDATE", "reported murders of", "between 1 October", "270978", "bisexual-", "19.01.2017"]
 
 # Initialize loop helper variables
 abv2Line = ""
@@ -88,8 +88,8 @@ for line in file:
             # Create field for Continent
             namerica = ['USA', 'Canada', 'Mexico', 'Dominican Republic', 'Costa Rica', 'El Salvador', 'Honduras']
             samerica = ['Argentina', 'Bolivia', 'Brazil', 'Chile', 'Colombia', 'Ecuador', 'Paraguay', 'Peru', 'Venezuela']
-            asia = ['China', 'India', 'Indonesia', 'Japan', 'Malaysia', 'Nepal', 'Pakistan', "Philippines", "Russia", 'Thailand', 'Turkey']
-            europe = ['France', "Italy", 'UK']
+            asia = ['China', 'India', 'Indonesia', 'Japan', 'Malaysia', 'Nepal', 'Pakistan', "Philippines", 'Thailand']
+            europe = ['France', "Italy", 'UK', "Russia", 'Turkey']
             africa = ['Liberia', 'South Africa']
             oceania = ['Papua New Guinea']
             if country in namerica:
@@ -123,7 +123,7 @@ for line in file:
                 
                 # Line 7 is Source and Source is a single line - Record and start over
                 #if "TvT" in line and line[-1] not in [",", "&", "n", "a", "1", "s"]: <-- 2016 specific
-                if "TvT" in line and line[-1] in ["4", "5", "6", "."]:
+                if ("TvT" in line or line[0:4] == "http") and line[-1] in ["4", "5", "6", "7", "."]:
                     source = line
                     record['remarks'] = remarks
                     record['source'] = source
@@ -135,7 +135,7 @@ for line in file:
                     print()
                 
                 # Source has multiple Lines, need next line added to source
-                elif "TvT" in line: 
+                elif "TvT" in line or line[0:4] == "http": 
                     source = line
                     record['remarks'] = remarks
                     prevLabel = "source"
@@ -144,15 +144,19 @@ for line in file:
                 else: 
                     remarks += " " + line
             
-            # If exists, Add 2nd line to Source - Record and start over
+            # If exists, Add 2nd, 3rd line to Source 
             elif prevLabel == "source":
-                source += " " + line
-                record['source'] = source
-                cnt = 0
-                prevLabel = ""
-                df = df.append(record, ignore_index = True)
-                print(record)
-                print()
+                if len(line.strip()) != 0:
+                    source += " " + line
+
+                else: #Record and start over
+                    record['source'] = source
+                    cnt = 0
+                    prevLabel = ""
+                    df = df.append(record, ignore_index = True)
+                    print(record)
+                    print()
+
 
     # Update loop helper variables
     abv2Line = prevLine
