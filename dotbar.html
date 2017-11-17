@@ -101,6 +101,14 @@ body {
   padding-right: 10%;
 } 
 
+#create {
+  color: #4e4f51;
+  padding: 5px;
+  font-family: Futura;
+  font: .9em sans-serif ;
+  /*padding-right: 15%;*/
+} 
+
 .svg-container {
     overflow: hidden;
 }
@@ -144,6 +152,9 @@ body {
 </div>
 <div class = "row" style="text-align: center;">
     <a href="http://transrespect.org/en/trans-murder-monitoring/tmm-resources"><div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "cite" style="white-space: pre-wrap; display: inline-block; text-align: left;">N.N. = Not Named &#10;Data from TvT research project (2017) “Trans Murder Monitoring (TMM) TDoR 2017 Update”, Transrespect versus Transphobia Worldwide &#10;TvT project website: http://transrespect.org/en/trans-murder-monitoring/tmm-resources</div></a>
+</div>
+<div class = "row" style="text-align: center;">
+    <a href="https://www.gaytascience.com"><div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "create" style="white-space: pre-wrap; display: inline-block; text-align: left;"><strong>&#10;Visualization created in d3.v4.js by Gayta Science | www.gaytascience.com | Follow @gaytascience on Facebook, Twitter, and Github</strong></div></a>
 </div>
 
 <script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/D5E5001F-AA7E-4E47-8C5F-BD52C68CD6AE/main.js" charset="utf-8"></script><script charset="utf-8" src="https://d3js.org/d3.v4.min.js"></script>
@@ -204,10 +215,7 @@ var x2 = d3.scaleTime()
            .domain([new Date(2016,9,1), new Date(2017,8,29)])
            .rangeRound([0, width]);
 
-//Note: data fetching is done each time the function is ran
-//as d3.csv is replaced by tabletop.js request to get data each time
-//from google spreadsheet
-
+//Update function
 function update(continent){
   // Get the data
   d3.csv(dataFile, function(error, allData) {
