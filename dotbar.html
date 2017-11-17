@@ -1,7 +1,10 @@
 <!-- STARTING EXAMPLE: https://bl.ocks.org/gcalmettes/95e3553da26ec90fd0a2890a678f3f69 -->
 <!-- Excel formula for some of the dates: =TEXT(MID(F39,4,2),"##")&"/"&LEFT(F39,2)&"/"&RIGHT(F39,4) -->
+
 <!DOCTYPE html>
-<meta charset="utf-8">
+<head>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<!-- charset not working, in excel replaced unicode with html from https://www.ascii.cl/htmlcodes.htm -->
 <script src="https://code.jquery.com/jquery.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 <style>
@@ -108,7 +111,7 @@ body {
 
 </style>
 
-
+</head>
 <body>
 <div class = "row">
   <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "title" align=center>TDoR 2017</div>
@@ -143,7 +146,7 @@ body {
     <a href="http://transrespect.org/en/trans-murder-monitoring/tmm-resources"><div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "cite" style="white-space: pre-wrap; display: inline-block; text-align: left;">N.N. = Not Named &#10;Data from TvT research project (2017) “Trans Murder Monitoring (TMM) TDoR 2017 Update”, Transrespect versus Transphobia Worldwide &#10;TvT project website: http://transrespect.org/en/trans-murder-monitoring/tmm-resources</div></a>
 </div>
 
-<script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/D5E5001F-AA7E-4E47-8C5F-BD52C68CD6AE/main.js" charset="UTF-8"></script><script src="https://d3js.org/d3.v4.min.js"></script>
+<script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/D5E5001F-AA7E-4E47-8C5F-BD52C68CD6AE/main.js" charset="utf-8"></script><script charset="utf-8" src="https://d3js.org/d3.v4.min.js"></script>
 <script>
 
 //SVG setup
@@ -194,7 +197,7 @@ const tooltip = d3.select("body")
 
 const t = d3.transition().duration(1000);
 
-const dataFile = "data/parsed.csv"
+const dataFile = "data/parsed_enc.csv"
 
 // Define x axis (doesnt change)
 var x2 = d3.scaleTime()

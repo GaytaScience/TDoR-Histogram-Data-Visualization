@@ -9,7 +9,7 @@
 # ---------------------------------------------------------------------------------------
 
 # Convert to txt file using PDFMiner on command line:
-# pdf2txt.py -o output.txt TvT_TMM_TDoR2016_Namelist_EN.pdf
+# pdf2txt.py -o output.txt TvT_TMM_TDoR2017_Namelist_EN.pdf
 
 import pandas as pd
 
@@ -88,8 +88,8 @@ for line in file:
             # Create field for Continent
             namerica = ['USA', 'Canada', 'Mexico', 'Dominican Republic', 'Costa Rica', 'El Salvador', 'Honduras']
             samerica = ['Argentina', 'Bolivia', 'Brazil', 'Chile', 'Colombia', 'Ecuador', 'Paraguay', 'Peru', 'Venezuela']
-            asia = ['China', 'India', 'Indonesia', 'Japan', 'Malaysia', 'Nepal', 'Pakistan', "Philippines", 'Thailand']
-            europe = ['France', "Italy", 'UK', "Russia", 'Turkey']
+            asia = ['China', 'India', 'Indonesia', 'Japan', 'Malaysia', 'Nepal', 'Pakistan', "Philippines", 'Thailand', 'Saudi Arabia']
+            europe = ['France', "Italy", 'UK', "Russia", 'Turkey', 'Sweden', 'Netherlands', 'Georgia', 'Spain']
             africa = ['Liberia', 'South Africa']
             oceania = ['Papua New Guinea']
             if country in namerica:
