@@ -1,4 +1,5 @@
 <!-- STARTING EXAMPLE: https://bl.ocks.org/gcalmettes/95e3553da26ec90fd0a2890a678f3f69 -->
+<!-- Spinner from http://bl.ocks.org/MattWoelk/6132258 -->
 <!-- Excel formula for some of the dates: =TEXT(MID(F39,4,2),"##")&"/"&LEFT(F39,2)&"/"&RIGHT(F39,4) -->
 
 <!DOCTYPE html>
@@ -20,6 +21,7 @@
 
 div {
     text-align:center;
+    background-color: black;
 }
 
 div.tooltip {
@@ -60,6 +62,7 @@ div.tooltip {
     background-color: #7997c6;
     color: black;
     font-weight: bold;
+    outline: none;
 }
 
 body {
@@ -82,7 +85,8 @@ body {
   color: white;
   padding: 5px;
   font-family: Futura;
-  font: 2em sans-serif ;
+  font: 2.5em sans-serif;
+  background-color: black;
 }
 
 #intro {
@@ -91,6 +95,7 @@ body {
   font-family: Futura;
   font: 1em sans-serif ;
   text-align:center;
+  background-color: black;
 } 
 
 #cite {
@@ -99,6 +104,7 @@ body {
   font-family: Futura;
   font: .8em sans-serif ;
   padding-right: 10%;
+  background-color: black;
 } 
 
 #create {
@@ -107,14 +113,17 @@ body {
   font-family: Futura;
   font: .9em sans-serif ;
   /*padding-right: 15%;*/
+  background-color: black;
 } 
 
 .svg-container {
     overflow: hidden;
+    background-color: black;
 }
 .svg-content {
     max-width: 1000px;
     min-width: 300px;
+    background-color: black;
 } 
 
 </style>
@@ -122,10 +131,10 @@ body {
 </head>
 <body>
 <div class = "row">
-  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "title" align=center>TDoR 2017</div>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "title" align=center>Transgender Day of Remembrance (TDoR) 2017</div>
 </div>
 <div class = "row">
-  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "intro" align=center>325 reported murders of trans and gender-diverse people between October 1, 2016 and September 30, 2017</div>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "intro" style="white-space: pre-wrap; display: inline-block; text-align: center;" align=center>325 reported murders of trans and gender-diverse people between October 1, 2016 and September 30, 2017 &#10; Hover for details (TW death, murder, rape, torture, transphobia, violence, weapons)</div>
 </div>
 <div class="row">
     <button class = "button" onclick="update('Africa')">
@@ -154,7 +163,7 @@ body {
     <a href="http://transrespect.org/en/trans-murder-monitoring/tmm-resources"><div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "cite" style="white-space: pre-wrap; display: inline-block; text-align: left;">N.N. = Not Named &#10;Data from TvT research project (2017) “Trans Murder Monitoring (TMM) TDoR 2017 Update”, Transrespect versus Transphobia Worldwide &#10;TvT project website: http://transrespect.org/en/trans-murder-monitoring/tmm-resources</div></a>
 </div>
 <div class = "row" style="text-align: center;">
-    <a href="https://www.gaytascience.com"><div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "create" style="white-space: pre-wrap; display: inline-block; text-align: left;"><strong>&#10;Visualization created in d3.v4.js by Gayta Science | www.gaytascience.com | Follow @gaytascience on Facebook, Twitter, and Github</strong></div></a>
+    <a href="https://www.gaytascience.com"><div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "create" style="white-space: pre-wrap; display: inline-block; text-align: center;"><strong>&#10;Visualization created in d3.v4.js by Gayta Science | www.gaytascience.com | Follow @gaytascience on Facebook, Twitter, and Github</strong></div></a>
 </div>
 
 <script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/D5E5001F-AA7E-4E47-8C5F-BD52C68CD6AE/main.js" charset="utf-8"></script><script charset="utf-8" src="https://d3js.org/d3.v4.min.js"></script>
@@ -184,6 +193,53 @@ function multiFormat(date) {
       : formatYear)(date);
 }
 
+function loader(config) {
+  return function() {
+    var radius = Math.min(config.width, config.height) / 2;
+    var tau = 2 * Math.PI;
+
+    var arc = d3.arc()
+            .innerRadius(radius*0.5)
+            .outerRadius(radius*0.9)
+            .startAngle(0);
+
+    var svg = d3.select(config.container).append("svg")
+        .attr("id", config.id)
+        .attr("width", config.width)
+        .attr("height", config.height)
+      .append("g")
+        .attr("transform", "translate(" + config.width / 2 + "," + config.height / 2 + ")")
+
+    var background = svg.append("path")
+            .datum({endAngle: 0.33*tau})
+            .style("fill", "#4D4D4D")
+            .attr("d", arc)
+            .call(spin, 1500)
+
+    function spin(selection, duration) {
+        selection.transition()
+            .ease(d3.easeLinear)
+            .duration(duration)
+            .attrTween("transform", function() {
+                return d3.interpolateString("rotate(0)", "rotate(360)");
+            });
+
+        setTimeout(function() { spin(selection, duration); }, duration);
+    }
+
+    function transitionFunction(path) {
+        path.transition()
+            .duration(7500)
+            .attrTween("stroke-dasharray", tweenDash)
+            .each("end", function() { d3.select(this).call(transition); });
+    }
+
+  };
+}
+
+var myLoader = loader({width: 500, height: 300, container: "#container", id: "loader"});
+myLoader();
+
 // Parse function for date
 var parseTime = d3.timeParse("%m/%d/%y");
 var formatTime = d3.timeFormat("%m/%d/%y");
@@ -209,11 +265,14 @@ const tooltip = d3.select("body")
 const t = d3.transition().duration(1000);
 
 const dataFile = "data/parsed_enc.csv"
+//const dataFile = "https://www.gaytascience.com/wp-content/uploads/2017/11/parsed_enc.csv"
 
 // Define x axis (doesnt change)
 var x2 = d3.scaleTime()
            .domain([new Date(2016,9,1), new Date(2017,8,29)])
            .rangeRound([0, width]);
+
+var target = document.getElementById("div#container");
 
 //Update function
 function update(continent){
@@ -225,6 +284,9 @@ function update(continent){
       //d.continent = d.continent
       d.date = parseTime(d.date);
     });
+
+    loader = d3.select("svg#loader")
+    loader.remove()
 
 
     // Filtered Data
