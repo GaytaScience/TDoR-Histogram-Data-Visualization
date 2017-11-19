@@ -10,15 +10,6 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 <style>
 
-.enter {
-  /*fill: #EDCA3A;*/
-  fill:#7997c6;
-}
-
-.selected {
-  fill: #E6B0F1;
-}
-
 div {
     text-align:center;
     background-color: black;
@@ -103,7 +94,7 @@ body {
   padding: 5px;
   font-family: Futura;
   font: .8em sans-serif ;
-  padding-right: 10%;
+  padding-right: 30%;
   background-color: black;
 } 
 
@@ -121,7 +112,7 @@ body {
     background-color: black;
 }
 .svg-content {
-    max-width: 1000px;
+    max-width: 1200px;
     min-width: 300px;
     background-color: black;
 } 
@@ -172,7 +163,7 @@ body {
 //SVG setup
 const margin = {top: 10, right: 30, bottom: 30, left: 30},
       width = 600 - margin.left - margin.right,
-      height = 200 - margin.top - margin.bottom;
+      height = 185 - margin.top - margin.bottom;
 
 // Custome time format
 var formatMillisecond = d3.timeFormat(".%L"),
@@ -249,7 +240,7 @@ var formatTime = d3.timeFormat("%m/%d/%y");
 //   .append("svg")
 var svg = d3.select("div#container").append("svg")
   .attr("preserveAspectRatio", "xMinYMin meet")
-  .attr("viewBox", "0 0 600 200")
+  .attr("viewBox", "0 0 600 185")
   //.attr("width", width + margin.left + margin.right)
   //.attr("height", height + margin.top + margin.bottom)
   .classed("svg-content", true)
@@ -264,8 +255,8 @@ const tooltip = d3.select("body")
 
 const t = d3.transition().duration(1000);
 
-const dataFile = "data/parsed_enc.csv"
-//const dataFile = "https://www.gaytascience.com/wp-content/uploads/2017/11/parsed_enc.csv"
+//const dataFile = "data/parsed_enc.csv"
+const dataFile = "https://www.gaytascience.com/wp-content/uploads/2017/11/parsed_enc.csv"
 
 // Define x axis (doesnt change)
 var x2 = d3.scaleTime()
@@ -330,7 +321,7 @@ function update(continent){
         .attr("transform", d => `translate(${x2(d.x0)}, ${height})`)
 
     //need to populate the bin containers with data the first time
-    binContainerEnter.selectAll("circle")
+    binContainerEnter.selectAll("image")
         .data(d => d.map((p, i) => {
           return {idx: i,
                   name: p.name,
@@ -344,24 +335,25 @@ function update(continent){
                 }
         }))
       .enter()
-      .append("circle")
-        .attr("class", "enter")
-        .attr("cx", 0) //g element already at correct x pos
-        .attr("cy", function(d) {
-            return - d.idx * 2 * d.radius - d.radius; })
-        .attr("r", 0)
+      .append("image")
+        .attr("xlink:href","https://www.gaytascience.com/wp-content/uploads/2017/11/candle0-e1511115732266.png")
+        .attr("x", 0) //g element already at correct x pos
+        .attr("y", function(d) {
+            return - d.idx * 2 * d.radius - d.radius - 8; })
         .on("mouseover", tooltipOn)
         .on("mouseout", tooltipOff)
         .transition()
         .duration(500)
-        .attr("r", function(d) {
-            return (d.length==0) ? 0 : d.radius; })
+        .attr("width", 10)
+        .attr("height", 10)
+        // .attr("r", function(d) {
+        //     return (d.length==0) ? 0 : d.radius; })
 
     binContainerEnter.merge(binContainer)
         .attr("transform", d => `translate(${x2(d.x0)}, ${height})`)
 
     //enter/update/exit for circles, inside each container
-    let dots = binContainer.selectAll("circle")
+    let dots = binContainer.selectAll("image")
         .data(d => d.map((p, i) => {
           return {idx: i,
                   name: p.name,
@@ -379,7 +371,9 @@ function update(continent){
     dots.exit()
       //.attr("class", "exit")
       .transition(t)
-      .attr("r", 0)
+      //.attr("r", 0)
+      .attr("width", 0)
+      .attr("height", 0)
       .remove();
 
     //UPDATE old elements present in new data.
@@ -387,19 +381,21 @@ function update(continent){
 
     //ENTER new elements present in new data.
     dots.enter()
-      .append("circle")
-      .attr("class", "enter")
-      .attr("cx", 0) //g element already at correct x pos
-      .attr("cy", function(d) {
-          return - d.idx * 2 * d.radius - d.radius; })
-      .attr("r", 0)
+      .append("image")
+        .attr("xlink:href","https://www.gaytascience.com/wp-content/uploads/2017/11/candle0-e1511115732266.png")
+        .attr("x", 0) //g element already at correct x pos
+        .attr("y", function(d) {
+            return - d.idx * 2 * d.radius - d.radius - 8; })
+
       .merge(dots)
       .on("mouseover", tooltipOn)
       .on("mouseout", tooltipOff)
       .transition()
       .duration(500)
-      .attr("r", function(d) {
-          return (d.length==0) ? 0 : d.radius; })
+      .attr("width", 10)
+      .attr("height", 10)
+      // .attr("r", function(d) {
+      //     return (d.length==0) ? 0 : d.radius; })
   });//d3.csv
 };//update
 
@@ -409,10 +405,10 @@ function tooltipOn(d) {
   let translateValue = gParent.attr("transform")
 
   let gX = translateValue.split(",")[0].split("(")[1]
-  let gY = height + (+d3.select(this).attr("cy")+100)
+  let gY = height + (+d3.select(this).attr("y")+100)
   //let gY = 150
 
-  d3.select(this)
+  d3.select(this).attr("xlink:href", "https://www.gaytascience.com/wp-content/uploads/2017/11/candle2-e1511115697505.png")
     .classed("selected", true)
   tooltip.transition()
     .duration(200)
@@ -423,7 +419,7 @@ function tooltipOn(d) {
 }//tooltipOn
 
 function tooltipOff(d) {
-  d3.select(this)
+  d3.select(this).attr("xlink:href", "https://www.gaytascience.com/wp-content/uploads/2017/11/candle0-e1511115732266.png")
       .classed("selected", false);
     tooltip.transition()
       .duration(500)
