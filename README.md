@@ -1,4 +1,4 @@
-## TDOR_2017
+## TDoR Histogram Data Visualization
 Data Visualization for Transgender Day of Remembrance (TDoR) 11/20 
 
 ### Data Folder
@@ -21,4 +21,4 @@ Master branch development uses dots or circles to represent each victim. The can
 ### Related Products
 Related posts can be found below:
 * **Final Visualization:** https://www.gaytascience.com/tdor2017/
-* **Blog Post:** 
+* **Blog Post:** https://www.gaytascience.com/tdor-2017-post/
