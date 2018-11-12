@@ -1,4 +1,4 @@
-## TDOR_2017
+## TDoR Histogram Data Visualization
 Data Visualization for Transgender Day of Remembrance (TDoR) 11/20 
 
 ### Data Folder
