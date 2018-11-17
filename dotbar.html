@@ -189,7 +189,7 @@ body {
 //SVG setup
 const margin = {top: 10, right: 30, bottom: 30, left: 30},
       width = 600 - margin.left - margin.right,
-      height = 225 - margin.top - margin.bottom;
+      height = 200 - margin.top - margin.bottom;
 
 // Custome time format
 var formatMillisecond = d3.timeFormat(".%L"),
@@ -266,7 +266,7 @@ var formatTime = d3.timeFormat("%m/%d/%y");
 //   .append("svg")
 var svg = d3.select("div#container").append("svg")
   .attr("preserveAspectRatio", "xMinYMin meet")
-  .attr("viewBox", "0 0 600 225")
+  .attr("viewBox", "0 0 600 200")
   //.attr("width", width + margin.left + margin.right)
   //.attr("height", height + margin.top + margin.bottom)
   .classed("svg-content", true)
