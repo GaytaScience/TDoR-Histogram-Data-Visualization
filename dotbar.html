@@ -6,13 +6,34 @@
 <head>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8">
 <!-- charset not working, in excel replaced unicode with html from https://www.ascii.cl/htmlcodes.htm -->
-<script src="https://code.jquery.com/jquery.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<!-- <script src="https://code.jquery.com/jquery.js"></script> -->
+<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script> -->
+<script src="https://www.gaytascience.com/wp-content/uploads/2018/07/bootstrap.min_.js"></script>
 <style>
 
 div {
     text-align:center;
     background-color: black;
+}
+
+/* unvisited link */
+a:link {
+    color: white;
+}
+
+/* visited link */
+a:visited {
+    color: white;
+}
+
+/* mouse over link */
+a:hover {
+    color: #4e4f51;
+}
+
+/* selected link */
+a:active {
+    color: white;
 }
 
 div.tooltip {
@@ -100,7 +121,7 @@ body {
 
 #create {
   color: #4e4f51;
-  padding: 5px;
+/*  padding: 5px;*/
   font-family: Futura;
   font: .9em sans-serif ;
   /*padding-right: 15%;*/
@@ -125,7 +146,7 @@ body {
   <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "title" align=center>Transgender Day of Remembrance (TDoR) 2018</div>
 </div>
 <div class = "row">
-  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "intro" style="white-space: pre-wrap; display: inline-block; text-align: center;" align=center>3XX reported murders of trans and gender-diverse people between October 1, 2017 and September 30, 2018 &#10; Hover for details (TW death, murder, rape, torture, transphobia, violence, weapons)</div>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "intro" style="white-space: pre-wrap; display: inline-block; text-align: center;" align=center>416 reported trans and gender-diverse deaths between October 1, 2017 and September 30, 2018 &#10; Hover for details (TW death, murder, rape, torture, transphobia, violence, weapons)</div>
 </div>
 <div class="row">
     <button class = "button" onclick="update('Africa')">
@@ -140,6 +161,9 @@ body {
     <button class = "button" onclick="update('North America')">
         North America
     </button>
+    <button class = "button" onclick="update('Oceania')">
+        Oceania
+    </button>
     <button class = "button" onclick="update('South America')">
         South America
     </button>
@@ -151,19 +175,21 @@ body {
   <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="container" class="svg-container" align=center></div>
 </div>
 <div class = "row" style="text-align: center;">
-    <a href="http://transrespect.org/en/trans-murder-monitoring/tmm-resources"><div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "cite" style="white-space: pre-wrap; display: inline-block; text-align: left;">N.N. = Not Named &#10;Data from TvT research project (2017) “Trans Murder Monitoring (TMM) TDoR 2017 Update”, Transrespect versus Transphobia Worldwide &#10;TvT project website: http://transrespect.org/en/trans-murder-monitoring/tmm-resources</div></a>
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "cite" style="white-space: pre-wrap; display: inline-block; text-align: left;">Data combined from <a href="http://transrespect.org/en/trans-murder-monitoring/tmm-resources">Transrespect versus Transphobia Worldwide Trans Murder Monitoring (TMM) Project</a> and <a href="https://tdor.translivesmatter.info">https://tdor.translivesmatter.info</a>.</div>
 </div>
 <div class = "row" style="text-align: center;">
     <a href="https://www.gaytascience.com"><div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "create" style="white-space: pre-wrap; display: inline-block; text-align: center;"><strong>&#10;Visualization created in d3.v4.js by Gayta Science | www.gaytascience.com | Follow @gaytascience on Facebook, Twitter, and Github</strong></div></a>
 </div>
 
-<script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/D5E5001F-AA7E-4E47-8C5F-BD52C68CD6AE/main.js" charset="utf-8"></script><script charset="utf-8" src="https://d3js.org/d3.v4.min.js"></script>
+<!-- <script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/D5E5001F-AA7E-4E47-8C5F-BD52C68CD6AE/main.js" charset="utf-8"></script> -->
+<!-- <script charset="utf-8" src="https://d3js.org/d3.v4.min.js"></script> -->
+<script charset="utf-8" src="https://www.gaytascience.com/wp-content/uploads/2018/07/d3.v4.min_.js"></script>
 <script>
 
 //SVG setup
 const margin = {top: 10, right: 30, bottom: 30, left: 30},
       width = 600 - margin.left - margin.right,
-      height = 185 - margin.top - margin.bottom;
+      height = 225 - margin.top - margin.bottom;
 
 // Custome time format
 var formatMillisecond = d3.timeFormat(".%L"),
@@ -240,7 +266,7 @@ var formatTime = d3.timeFormat("%m/%d/%y");
 //   .append("svg")
 var svg = d3.select("div#container").append("svg")
   .attr("preserveAspectRatio", "xMinYMin meet")
-  .attr("viewBox", "0 0 600 185")
+  .attr("viewBox", "0 0 600 225")
   //.attr("width", width + margin.left + margin.right)
   //.attr("height", height + margin.top + margin.bottom)
   .classed("svg-content", true)
@@ -255,12 +281,13 @@ const tooltip = d3.select("body")
 
 const t = d3.transition().duration(1000);
 
-const dataFile = "data/2017/parsed_enc.csv"
+//const dataFile = "data/2017/parsed_enc.csv"
+dataFile = "data/2018/2018tdor_combined.csv"
 //const dataFile = "https://www.gaytascience.com/wp-content/uploads/2017/11/parsed_enc.csv"
 
 // Define x axis (doesnt change)
 var x2 = d3.scaleTime()
-           .domain([new Date(2016,9,1), new Date(2017,8,29)])
+           .domain([new Date(2017,9,1), new Date(2018,8,29)])
            .rangeRound([0, width]);
 
 var target = document.getElementById("div#container");
