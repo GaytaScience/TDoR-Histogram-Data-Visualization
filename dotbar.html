@@ -8,7 +8,6 @@
 <!-- charset not working, in excel replaced unicode with html from https://www.ascii.cl/htmlcodes.htm -->
 <script src="https://code.jquery.com/jquery.js"></script>
 <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script> -->
-<script src="https://www.gaytascience.com/wp-content/uploads/2018/07/bootstrap.min_.js"></script>
 <style>
 
 .enter {
@@ -155,7 +154,7 @@ body {
   <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "title" align=center>Transgender Day of Remembrance (TDoR) 2018</div>
 </div>
 <div class = "row">
-  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "intro" style="white-space: pre-wrap; display: inline-block; text-align: center;" align=center>418 reported trans and gender-diverse deaths between October 1, 2017 and September 30, 2018 &#10; Hover for details (TW death, murder, rape, torture, transphobia, violence, weapons)</div>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "intro" style="white-space: pre-wrap; display: inline-block; text-align: center;" align=center>419 reported trans and gender-diverse deaths between October 1, 2017 and September 30, 2018 &#10; Hover/Click for details (TW death, murder, rape, torture, transphobia, violence, weapons)</div>
 </div>
 <div class="row">
     <button class = "button" onclick="update('Africa')">
@@ -366,6 +365,7 @@ function update(continent){
                   cause: p.cause,
                   location: p.location,
                   remarks: p.remarks,
+                  link: p.link,
                   radius: 5
                   //radius: (x2(d.x1)-x2(d.x0))/2
                 }
@@ -377,8 +377,16 @@ function update(continent){
         .attr("cy", function(d) {
             return - d.idx * 2 * d.radius - d.radius; })
         .attr("r", 0)
+        //.attr("xlink:href", function(d) {return d.link})
         .on("mouseover", tooltipOn)
         .on("mouseout", tooltipOff)
+        .on("click", function(d){ 
+          var url = d.link;
+          window.open(
+            url,
+            '_blank' // <- This is what makes it open in a new window.
+          );            
+        })
         .transition()
         .duration(500)
         .attr("r", function(d) {
@@ -397,6 +405,7 @@ function update(continent){
                   cause: p.cause,
                   location: p.location,
                   remarks: p.remarks,
+                  link: p.link,
                   //radius: (x2(d.x1)-x2(d.x0))/2
                   radius: 5
                 }
@@ -420,9 +429,17 @@ function update(continent){
       .attr("cy", function(d) {
           return - d.idx * 2 * d.radius - d.radius; })
       .attr("r", 0)
+      //.attr("xlink:href", function(d) {return d.link})
       .merge(dots)
       .on("mouseover", tooltipOn)
       .on("mouseout", tooltipOff)
+      .on("click", function(d){ 
+        var url = d.link;
+        window.open(
+          url,
+          '_blank' // <- This is what makes it open in a new window.
+        ); 
+      })
       .transition()
       .duration(500)
       .attr("r", function(d) {
