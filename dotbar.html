@@ -142,15 +142,15 @@ body {
 </head>
 <body>
 <div class = "row">
-  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "title" align=center>Transgender Day of Remembrance (TDoR) 2018</div>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "title" align=center>Transgender Day of Remembrance (TDoR) 2019</div>
 </div>
 <div class = "row">
-  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "intro" style="white-space: pre-wrap; display: inline-block; text-align: center;" align=center>419 reported trans and gender-diverse deaths between October 1, 2017 and September 30, 2018 &#10; Hover/Click for details (TW death, murder, rape, torture, transphobia, violence, weapons)</div>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "intro" style="white-space: pre-wrap; display: inline-block; text-align: center;" align=center>369 reported trans and gender-diverse deaths between October 1, 2018 and September 30, 2019 &#10; Hover/Click for details (TW death, murder, rape, torture, transphobia, violence, weapons)</div>
 </div>
 <div class="row">
-    <button class = "button" onclick="update('Africa')">
+<!--     <button class = "button" onclick="update('Africa')">
         Africa
-    </button>
+    </button> -->
     <button class = "button" onclick="update('Asia')">
         Asia
     </button>
@@ -160,9 +160,9 @@ body {
     <button class = "button" onclick="update('North America')">
         North America
     </button>
-    <button class = "button" onclick="update('Oceania')">
+<!--     <button class = "button" onclick="update('Oceania')">
         Oceania
-    </button>
+    </button> -->
     <button class = "button" onclick="update('South America')">
         South America
     </button>
@@ -174,10 +174,10 @@ body {
   <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="container" class="svg-container" align=center></div>
 </div>
 <div class = "row" style="text-align: center;">
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "cite" style="white-space: pre-wrap; display: inline-block; text-align: left;">Data from <a href="https://tdor.translivesmatter.info">https://tdor.translivesmatter.info</a>, a project combining info from official <a href="http://transrespect.org/en/trans-murder-monitoring/tmm-resources">TGEU murder monitoring</a> and original news sources and reports.</div>
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "cite" style="white-space: pre-wrap; display: inline-block; text-align: left;">Data from <a href="https://tdor.translivesmatter.info">https://tdor.translivesmatter.info</a>, a project combining info from official <a href="https://tgeu.org/tmm-update-trans-day-of-remembrance-2019/330/">TGEU murder monitoring</a> and original news sources and reports.</div>
 </div>
 <div class = "row" style="text-align: center;">
-  <a href="https://www.gaytascience.com"><div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "create" style="white-space: pre-wrap; display: inline-block; text-align: center;"><strong>&#10;Visualization created in d3.v4.js by Gayta Science | www.gaytascience.com | Follow @gaytascience on Facebook, Twitter, and Github</strong></div></a>
+    <a href="https://www.gaytascience.com"><div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "create" style="white-space: pre-wrap; display: inline-block; text-align: center;"><strong>&#10;Visualization created in d3.v4.js by Gayta Science | www.gaytascience.com | Follow @gaytascience on Facebook, Instagram, Twitter, and Github</strong></div></a>
 </div>
 
 <!-- <script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/D5E5001F-AA7E-4E47-8C5F-BD52C68CD6AE/main.js" charset="utf-8"></script> -->
@@ -186,9 +186,11 @@ body {
 <script>
 
 //SVG setup
-const margin = {top: 10, right: 30, bottom: 25, left: 30},
-      width = 600 - margin.left - margin.right,
-      height = 200 - margin.top - margin.bottom;
+const widthpx = 600
+const heightpx = 200
+const margin = {top: 10, right: 30, bottom: 30, left: 30},
+      width = widthpx - margin.left - margin.right,
+      height = heightpx - margin.top - margin.bottom;
 
 // Custome time format
 var formatMillisecond = d3.timeFormat(".%L"),
@@ -253,19 +255,19 @@ function loader(config) {
   };
 }
 
-var myLoader = loader({width: 500, height: 300, container: "#container", id: "loader"});
+var myLoader = loader({width: widthpx, height: heightpx, container: "#container", id: "loader"});
 myLoader();
 
 // Parse function for date
-var parseTime = d3.timeParse("%m/%d/%y");
-var formatTime = d3.timeFormat("%m/%d/%y");
+var parseTime = d3.timeParse("%m/%d/%Y");
+var formatTime = d3.timeFormat("%m/%d/%Y");
 
 //set up svg
 // const svg = d3.select("body")
 //   .append("svg")
 var svg = d3.select("div#container").append("svg")
   .attr("preserveAspectRatio", "xMinYMin meet")
-  .attr("viewBox", "0 0 600 200")
+  .attr("viewBox", "0 0 " + widthpx + " " + heightpx) // 600 200")
   //.attr("width", width + margin.left + margin.right)
   //.attr("height", height + margin.top + margin.bottom)
   .classed("svg-content", true)
@@ -281,12 +283,15 @@ const tooltip = d3.select("body")
 const t = d3.transition().duration(1000);
 
 //const dataFile = "data/2017/parsed_enc.csv"
-dataFile = "data/2018/2018tdor_combined.csv"
+//dataFile = "data/2018/2018tdor_combined.csv"
 //const dataFile = "https://www.gaytascience.com/wp-content/uploads/2018/11/2018tdor_combined2.csv"
+//dataFile = "data/2018/2018tdor_combined.csv"
+dataFile = "data/2019/tdor2019_cln.csv"
+//const dataFile = "https://www.gaytascience.com/wp-content/uploads/2017/11/parsed_enc.csv"
 
 // Define x axis (doesnt change)
 var x2 = d3.scaleTime()
-           .domain([new Date(2017,9,1), new Date(2018,8,29)])
+           .domain([new Date(2018,9,1), new Date(2019,8,29)])
            .rangeRound([0, width]);
 
 var target = document.getElementById("div#container");
