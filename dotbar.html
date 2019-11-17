@@ -6,7 +6,8 @@
 <head>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8">
 <!-- charset not working, in excel replaced unicode with html from https://www.ascii.cl/htmlcodes.htm -->
-<script src="https://code.jquery.com/jquery.js"></script>
+<script src="https://code.jquery.com/jquery.js"></script> 
+<!-- ^^ Comment out on WP paste! -->
 <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script> -->
 <style>
 
@@ -114,7 +115,7 @@ body {
 /*  padding: 5px;*/
   font-family: Futura;
   font: .8em sans-serif ;
-  padding-right: 25%;
+  padding-right: 20%;
   background-color: black;
 } 
 
@@ -174,7 +175,7 @@ body {
   <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="container" class="svg-container" align=center></div>
 </div>
 <div class = "row" style="text-align: center;">
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "cite" style="white-space: pre-wrap; display: inline-block; text-align: left;">Data from <a href="https://tdor.translivesmatter.info">https://tdor.translivesmatter.info</a>, a project combining info from official <a href="https://tgeu.org/tmm-update-trans-day-of-remembrance-2019/330/">TGEU murder monitoring</a> and original news sources and reports.</div>
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "cite" style="white-space: pre-wrap; display: inline-block; text-align: left;">Data from <a href="https://tdor.translivesmatter.info">tdor.translivesmatter.info</a>, a project combining official <a href="https://tgeu.org/tmm-update-trans-day-of-remembrance-2019/330/">TGEU murder monitoring</a> with original news sources and reports. Details in accompanying <a href="https://www.gaytascience.com/tdor-dataviz/">blog post</a>.</div>
 </div>
 <div class = "row" style="text-align: center;">
     <a href="https://www.gaytascience.com"><div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "create" style="white-space: pre-wrap; display: inline-block; text-align: center;"><strong>&#10;Visualization created in d3.v4.js by Gayta Science | www.gaytascience.com | Follow @gaytascience on Facebook, Instagram, Twitter, and Github</strong></div></a>
@@ -187,8 +188,8 @@ body {
 
 //SVG setup
 const widthpx = 600
-const heightpx = 200
-const margin = {top: 10, right: 30, bottom: 30, left: 30},
+const heightpx = 185
+const margin = {top: 10, right: 30, bottom: 25, left: 30},
       width = widthpx - margin.left - margin.right,
       height = heightpx - margin.top - margin.bottom;
 
@@ -288,6 +289,7 @@ const t = d3.transition().duration(1000);
 //dataFile = "data/2018/2018tdor_combined.csv"
 dataFile = "data/2019/tdor2019_cln.csv"
 //const dataFile = "https://www.gaytascience.com/wp-content/uploads/2017/11/parsed_enc.csv"
+// const dataFile = "https://www.gaytascience.com/wp-content/uploads/2019/11/tdor2019_cln.csv"
 
 // Define x axis (doesnt change)
 var x2 = d3.scaleTime()
