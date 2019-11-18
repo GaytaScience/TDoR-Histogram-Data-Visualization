@@ -12,7 +12,13 @@ The 2017 data folder contains parsing scripts and data from the TGEU original re
 The file dotbar.html contains the code for the d3.v4.js visualization. 
 ![Animated gif of Transgender Day of Remembrance (TDoR) data visualization.](https://www.gaytascience.com/wp-content/uploads/2019/11/longfilter2.gif)
 
-### Related Products
-Related posts can be found below:
+### Links
 * **Final Visualizations:** [2019](https://www.gaytascience.com/tdor2019/), [2018](https://www.gaytascience.com/tdor2018/), [2017 (TGEU data only)](https://www.gaytascience.com/tdor2017/)
 * **Blog Post:** https://www.gaytascience.com/tdor-dataviz/
+
+### Development
+Visualization can be built locally after cloning the repository. For example, to use a python simple server:
+* In a terminal navigate to the repository folder (`cd [filepath]`)
+* Start a simple server for local development. For Python 3 the command is `python -m http.server 8000`
+* In a browser go to http://localhost:8000/dotbar.html
+* Files can now be edited locally with changes reflected when you refresh your browser page!
