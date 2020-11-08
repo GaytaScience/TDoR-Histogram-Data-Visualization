@@ -143,10 +143,10 @@ body {
 </head>
 <body>
 <div class = "row">
-  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "title" align=center>Transgender Day of Remembrance (TDoR) 2019</div>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "title" align=center>Transgender Day of Remembrance (TDoR) 2020</div>
 </div>
 <div class = "row">
-  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "intro" style="white-space: pre-wrap; display: inline-block; text-align: center;" align=center>369 reported trans and gender-diverse deaths between October 1, 2018 and September 30, 2019 &#10; Hover/Click for details (TW death, murder, rape, torture, transphobia, violence, weapons)</div>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "intro" style="white-space: pre-wrap; display: inline-block; text-align: center;" align=center>388 reported trans and gender-diverse deaths between October 1, 2019 and September 30, 2020 &#10; Hover/Click for details (TW death, murder, rape, torture, transphobia, violence, weapons)</div>
 </div>
 <div class="row">
 <!--     <button class = "button" onclick="update('Africa')">
@@ -161,9 +161,9 @@ body {
     <button class = "button" onclick="update('North America')">
         North America
     </button>
-<!--     <button class = "button" onclick="update('Oceania')">
+    <button class = "button" onclick="update('Oceania')">
         Oceania
-    </button> -->
+    </button>
     <button class = "button" onclick="update('South America')">
         South America
     </button>
@@ -175,7 +175,7 @@ body {
   <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="container" class="svg-container" align=center></div>
 </div>
 <div class = "row" style="text-align: center;">
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "cite" style="white-space: pre-wrap; display: inline-block; text-align: left;">Data from <a href="https://tdor.translivesmatter.info">tdor.translivesmatter.info</a>, a project combining official <a href="https://tgeu.org/tmm-update-trans-day-of-remembrance-2019/330/">TGEU murder monitoring</a> with original news sources and reports. Details in accompanying <a href="https://www.gaytascience.com/tdor-dataviz/">blog post</a>.</div>
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "cite" style="white-space: pre-wrap; display: inline-block; text-align: left;">Data from <a href="https://tdor.translivesmatter.info">tdor.translivesmatter.info</a>, a project combining official <a href="https://transrespect.org/en/research/tmm/">TGEU murder monitoring</a> with original news sources and reports. Details in accompanying <a href="https://www.gaytascience.com/tdor-dataviz/">blog post</a>.</div>
 </div>
 <div class = "row" style="text-align: center;">
     <a href="https://www.gaytascience.com"><div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "create" style="white-space: pre-wrap; display: inline-block; text-align: center;"><strong>&#10;Visualization created in d3.v4.js by Gayta Science | www.gaytascience.com | Follow @gaytascience on Facebook, Instagram, Twitter, and Github</strong></div></a>
@@ -188,7 +188,7 @@ body {
 
 //SVG setup
 const widthpx = 600
-const heightpx = 185
+const heightpx = 195
 const margin = {top: 10, right: 30, bottom: 25, left: 30},
       width = widthpx - margin.left - margin.right,
       height = heightpx - margin.top - margin.bottom;
@@ -287,13 +287,15 @@ const t = d3.transition().duration(1000);
 //dataFile = "data/2018/2018tdor_combined.csv"
 //const dataFile = "https://www.gaytascience.com/wp-content/uploads/2018/11/2018tdor_combined2.csv"
 //dataFile = "data/2018/2018tdor_combined.csv"
-dataFile = "data/2019/tdor2019_cln.csv"
+// dataFile = "data/2019/tdor2019_cln.csv"
+dataFile = "data/2020/tdor2020_cln.csv"
 //const dataFile = "https://www.gaytascience.com/wp-content/uploads/2017/11/parsed_enc.csv"
 // const dataFile = "https://www.gaytascience.com/wp-content/uploads/2019/11/tdor2019_cln.csv"
 
 // Define x axis (doesnt change)
 var x2 = d3.scaleTime()
-           .domain([new Date(2018,9,1), new Date(2019,9,1)])
+           // .domain([new Date(2019,8,27), new Date(2020,9,5)])
+           .domain([new Date(2019,8,27), new Date(2020,9,1)])
            .rangeRound([0, width]);
 
 var target = document.getElementById("div#container");
@@ -325,7 +327,6 @@ function update(continent){
 
     // Determine the first and last dates in the data set
     var dayExtent = d3.extent(allData, function (d) { return d.date; });
-
     console.log(dayExtent);
 
     // Create one bin per week, use offset for full weeks
