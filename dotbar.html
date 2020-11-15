@@ -181,8 +181,6 @@ body {
     <a href="https://www.gaytascience.com"><div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "create" style="white-space: pre-wrap; display: inline-block; text-align: center;"><strong>&#10;Visualization created in d3.v4.js by Gayta Science | www.gaytascience.com | Follow @gaytascience on Facebook, Instagram, Twitter, and Github</strong></div></a>
 </div>
 
-<!-- <script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/D5E5001F-AA7E-4E47-8C5F-BD52C68CD6AE/main.js" charset="utf-8"></script> -->
-<!-- <script charset="utf-8" src="https://d3js.org/d3.v4.min.js"></script> -->
 <script charset="utf-8" src="https://www.gaytascience.com/wp-content/uploads/2018/07/d3.v4.min_.js"></script>
 <script>
 
@@ -283,14 +281,10 @@ const tooltip = d3.select("body")
 
 const t = d3.transition().duration(1000);
 
-//const dataFile = "data/2017/parsed_enc.csv"
-//dataFile = "data/2018/2018tdor_combined.csv"
-//const dataFile = "https://www.gaytascience.com/wp-content/uploads/2018/11/2018tdor_combined2.csv"
-//dataFile = "data/2018/2018tdor_combined.csv"
 // dataFile = "data/2019/tdor2019_cln.csv"
 dataFile = "data/2020/tdor2020_cln.csv"
-//const dataFile = "https://www.gaytascience.com/wp-content/uploads/2017/11/parsed_enc.csv"
 // const dataFile = "https://www.gaytascience.com/wp-content/uploads/2019/11/tdor2019_cln.csv"
+// const dataFile = "https://www.gaytascience.com/wp-content/uploads/2020/11/tdor2020_cln.csv"
 
 // Define x axis (doesnt change)
 var x2 = d3.scaleTime()
@@ -465,8 +459,11 @@ function tooltipOn(d) {
     .duration(200)
     .style("opacity", .9);
   // Create string to display thumbnail photo (if exists)
+  var thumbpath = "https://www.gaytascience.com/wp-content/uploads/"
+  // var thumbpath = "/data/2020/"
   if (d.thumbnail != "") {
-  var picstring = "<img src=" + "'data/2020/" + d.thumbnail + "'" + "height='100'>" + "<br/> ";
+  var picstring = "<img src=" + "'" + thumbpath + d.thumbnail + "'" + "style='height:100px;'>" + "<br/> ";
+  // <img src="theSource" style="width:30px;height:30px;" />
   } else {
   var picstring = "";
   }
