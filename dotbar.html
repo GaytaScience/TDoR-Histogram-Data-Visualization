@@ -146,12 +146,12 @@ body {
   <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "title" align=center>Transgender Day of Remembrance (TDoR) 2020</div>
 </div>
 <div class = "row">
-  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "intro" style="white-space: pre-wrap; display: inline-block; text-align: center;" align=center>388 reported trans and gender-diverse deaths between October 1, 2019 and September 30, 2020 &#10; Hover/Click for details (TW death, murder, rape, torture, transphobia, violence, weapons)</div>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "intro" style="white-space: pre-wrap; display: inline-block; text-align: center;" align=center>430 reported trans and gender-diverse deaths between October 1, 2019 and September 30, 2020 &#10; Hover/Click for details (TW death, murder, rape, torture, transphobia, violence, weapons)</div>
 </div>
 <div class="row">
-<!--     <button class = "button" onclick="update('Africa')">
+    <button class = "button" onclick="update('Africa')">
         Africa
-    </button> -->
+    </button>
     <button class = "button" onclick="update('Asia')">
         Asia
     </button>
@@ -175,7 +175,7 @@ body {
   <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="container" class="svg-container" align=center></div>
 </div>
 <div class = "row" style="text-align: center;">
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "cite" style="white-space: pre-wrap; display: inline-block; text-align: left;">Data from <a href="https://tdor.translivesmatter.info">tdor.translivesmatter.info</a>, a project combining official <a href="https://transrespect.org/en/research/tmm/">TGEU murder monitoring</a> with original news sources and reports. Details in accompanying <a href="https://www.gaytascience.com/tdor-dataviz/">blog post</a>.</div>
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "cite" style="white-space: pre-wrap; display: inline-block; text-align: left;">Data from <a href="https://tdor.translivesmatter.info">tdor.translivesmatter.info</a>, a project combining official <a href="https://transrespect.org/en/tmm-update-tdor-2020/">TGEU murder monitoring</a> with original news sources and reports. Details in accompanying <a href="https://www.gaytascience.com/tdor-dataviz/">blog post</a>.</div>
 </div>
 <div class = "row" style="text-align: center;">
     <a href="https://www.gaytascience.com"><div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id = "create" style="white-space: pre-wrap; display: inline-block; text-align: center;"><strong>&#10;Visualization created in d3.v4.js by Gayta Science | www.gaytascience.com | Follow @gaytascience on Facebook, Instagram, Twitter, and Github</strong></div></a>
@@ -363,6 +363,7 @@ function update(continent){
                   age: p.age,
                   cause: p.cause,
                   location: p.location,
+                  thumbnail: p.thumbnail,
                   remarks: p.remarks,
                   link: p.link,
                   radius: 5
@@ -403,6 +404,7 @@ function update(continent){
                   age: p.age,
                   cause: p.cause,
                   location: p.location,
+                  thumbnail: p.thumbnail,
                   remarks: p.remarks,
                   link: p.link,
                   //radius: (x2(d.x1)-x2(d.x0))/2
@@ -462,7 +464,14 @@ function tooltipOn(d) {
   tooltip.transition()
     .duration(200)
     .style("opacity", .9);
-  tooltip.html("<strong>" + d.name + "</strong>" + "<br/> " + "Age " + d.age + "<br/> " + d.location + "<br/> " + d.remarks)
+  // Create string to display thumbnail photo (if exists)
+  if (d.thumbnail != "") {
+  var picstring = "<img src=" + "'data/2020/" + d.thumbnail + "'" + "height='100'>" + "<br/> ";
+  } else {
+  var picstring = "";
+  }
+  // Define tooltip information
+  tooltip.html(picstring + "<strong>" + d.name + "</strong>" + "<br/> " + "Age " + d.age + "<br/> " + d.location + "<br/> " + d.remarks)
     .style("left", gX + "px")
     .style("top", gY + "px");
 }//tooltipOn
