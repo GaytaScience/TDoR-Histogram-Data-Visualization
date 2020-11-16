@@ -9,7 +9,7 @@ In 2018, [Anna-Jayne Metcalfe](https://twitter.com/annajayne) sought out to [lea
 The 2017 data folder contains parsing scripts and data from the TGEU original reports, while all other years contain cleaned files pulled from https://tdor.translivesmatter.info/ 
 
 ### Visualization
-The file dotbar.html contains the code for the d3.v4.js visualization. 
+The file dotbar.html contains the code for the d3.v4.js visualization (TW death, murder, violence, weapons): 
 ![Animated gif of Transgender Day of Remembrance (TDoR) data visualization.](https://www.gaytascience.com/wp-content/uploads/2020/11/tdor2020_long.gif)
 
 ### Links
