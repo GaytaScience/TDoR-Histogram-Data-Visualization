@@ -1,4 +1,4 @@
-The 2017 data folder contains parsing scripts and data from the TGEU original reports, while 2018 contains files pulled from https://tdor.translivesmatter.info/
+The 2017 data folder contains parsing scripts and data from the TGEU original reports, while the folders for the more recent years contain data pulled from https://tdor.translivesmatter.info/
 
 2017 files include:
 * **TvT_TMM_TDoR2017_Namelist_EN:** Original report downloaded from http://transrespect.org/en/trans-murder-monitoring/tmm-resources/
