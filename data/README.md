@@ -12,6 +12,7 @@ The 2017 data folder contains parsing scripts and data from the TGEU original re
 * **TvT_TMM Report: (optional)** TGEU report for cross referencing, if desired.
 
 All file includes:
+
 This folder contains initial code for processing all TDoR Info data for a comprehensive data visualization.
 * **All_Exploration.ipynb:** Jupyter notebook exploring data export through 2020 from [TDoR Info](https://tdor.translivesmatter.info/). The notebook merges on manual remarks from Gayta Science's yearly TDoR visualizations, does some light cleaning, and exports a full .csv file.
 * **All_Enhanced.csv:** An enhanced version of the exported .csv file from All_Exploration.ipynb.
